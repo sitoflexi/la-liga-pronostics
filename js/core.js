@@ -3,6 +3,7 @@
 window.LIGA = (() => {
   const PTS = { exact: 5, sign: 2, miss: 0 };
   const HALTED = ["aplazado", "suspendido"];
+  const BOTE_POR_JORNADA = 3; // € que paga el último (o los últimos empatados) de cada jornada cerrada
 
   function parseScore(s) {
     if (s == null) return null;
@@ -50,23 +51,26 @@ window.LIGA = (() => {
       }
       const max = Math.max(...players.map((p) => rows[p].pts));
       const winners = complete && max > 0 ? players.filter((p) => rows[p].pts === max) : [];
-      return { n: j.n, j, played, postponed, complete, started: played > 0, rows, max, winners, firstDate: dates[0] || null };
+      const min = Math.min(...players.map((p) => rows[p].pts));
+      const losers = complete ? players.filter((p) => rows[p].pts === min) : [];
+      return { n: j.n, j, played, postponed, complete, started: played > 0, rows, max, winners, losers, firstDate: dates[0] || null };
     });
 
     const active = js.filter((x) => x.started);
     const table = players.map((p) => {
-      let total = 0, exact = 0, sgn = 0, miss = 0, won = 0, comPts = 0, comHits = 0, comN = 0;
+      let total = 0, exact = 0, sgn = 0, miss = 0, won = 0, lost = 0, comPts = 0, comHits = 0, comN = 0;
       const cum = [];
       for (const x of active) {
         const r = x.rows[p];
         total += r.pts; exact += r.exact; sgn += r.sign; miss += r.miss;
         if (x.winners.includes(p)) won++;
+        if (x.losers.includes(p)) lost++;
         if (r.comodinDone) { comN++; comPts += r.comodinPts; if (r.comodinPts > 0) comHits++; }
         cum.push(total);
       }
       const decided = exact + sgn + miss;
       return { name: p, total, exact, sign: sgn, miss, decided, won, cum, comPts, comHits, comN,
-        bote: (data.bote && data.bote[p]) || 0, hitRate: decided ? (exact + sgn) / decided : 0 };
+        lost, bote: lost * BOTE_POR_JORNADA + ((data.boteAjuste && data.boteAjuste[p]) || 0), hitRate: decided ? (exact + sgn) / decided : 0 };
     });
     table.sort((a, b) => b.total - a.total || b.exact - a.exact || a.name.localeCompare(b.name));
     table.forEach((t, i) => { t.pos = i > 0 && table[i - 1].total === t.total ? table[i - 1].pos : i + 1; });
@@ -99,5 +103,5 @@ window.LIGA = (() => {
     return jornadaStarted ? "pendiente" : null;
   }
 
-  return { PTS, HALTED, parseScore, norm, show, outcome, compute, when, matchState };
+  return { PTS, HALTED, BOTE_POR_JORNADA, parseScore, norm, show, outcome, compute, when, matchState };
 })();

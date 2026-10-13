@@ -49,7 +49,7 @@
       if (!best || pts > best.pts) best = { pts, who: [p], n: x.n };
       else if (pts === best.pts && best.n === x.n) best.who.push(p);
     }
-    const bote = Object.values(data.bote || {}).reduce((a, b) => a + b, 0);
+    const bote = t.reduce((a, x) => a + x.bote, 0);
     const tile = (k, v, d) => el("div", { class: "tile" }, el("div", { class: "k" }, k), el("div", { class: "v" }, v), el("div", { class: "d" }, d));
     $("#tiles").replaceChildren(
       tile("Líder", leaders, `${lead.total} pts` + (second ? ` · +${lead.total - second.total} sobre el siguiente` : "")),
@@ -57,7 +57,7 @@
         : next ? tile("Próxima jornada", `J${next.n}`, next.firstDate ? `Empieza el ${when(next.firstDate)}` : "Fechas por confirmar")
         : tile("Última jornada", last ? `J${last.n}` : "—", ""),
       tile("Mejor jornada", best ? `${best.pts} pts` : "—", best ? `${best.who.join(" · ")} en la J${best.n}` : ""),
-      tile("Bote acumulado", `${bote.toLocaleString("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`, `${data.players.length} jugadores`),
+      tile("Bote acumulado", `${bote.toLocaleString("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`, `+${window.LIGA.BOTE_POR_JORNADA} € el último de cada jornada`),
     );
   }
 
@@ -69,7 +69,7 @@
       S.active.map((x) => el("th", { title: x.complete ? "" : "En curso" }, `J${x.n}`)),
       el("th", {}, "Total"), el("th", { title: "Jornadas ganadas" }, "👑"),
       el("th", { title: "Resultados exactos" }, "Exactos"), el("th", { title: "% de partidos con algún acierto" }, "% acierto"),
-      el("th", {}, "Bote"));
+      el("th", { title: "Jornadas en último lugar × 3 €" }, "Bote"));
     const rows = S.table.map((t) => {
       const c = colorOf(t.name);
       const tr = el("tr", { class: "clickable" + (c ? " sel" : ""), onclick: () => toggle(t.name) },
@@ -77,9 +77,9 @@
         el("td", { class: "name" }, t.name),
         S.active.map((x) => {
           const r = x.rows[t.name];
-          const won = x.winners.includes(t.name);
-          return el("td", { class: `heat h${heat(r.pts)}` + (x.complete ? "" : " live"), title: `J${x.n}: ${r.pts} pts` },
-            r.predicted ? r.pts : "–", won ? el("span", { class: "crown" }, " 👑") : null);
+          const won = x.winners.includes(t.name), lost = x.losers.includes(t.name);
+          return el("td", { class: `heat h${heat(r.pts)}` + (x.complete ? "" : " live"), title: `J${x.n}: ${r.pts} pts` + (lost ? ` · último, +${window.LIGA.BOTE_POR_JORNADA} € al bote` : "") },
+            r.predicted ? r.pts : "–", won ? el("span", { class: "crown" }, " 👑") : null, lost ? el("span", { class: "crown" }, " 💸") : null);
         }),
         el("td", { class: "total" }, t.total),
         el("td", {}, t.won || ""),
@@ -185,7 +185,7 @@
     const order = [...S.table].map((t) => t.name).sort((a, b) => x.rows[b].pts - x.rows[a].pts || a.localeCompare(b));
     const rows = order.map((p) => {
       const r = x.rows[p];
-      return el("tr", {}, el("td", { class: "name" }, p, x.winners.includes(p) ? " 👑" : ""),
+      return el("tr", {}, el("td", { class: "name" }, p, x.winners.includes(p) ? " 👑" : "", x.losers.includes(p) ? ` 💸 +${window.LIGA.BOTE_POR_JORNADA} €` : ""),
         r.cells.map((c) => el("td", {
           class: `cell ${c.o}` + (c.comodin ? " comodin" : ""),
           title: c.o === "pending" || c.o === "empty" ? "" : `${c.pts} pts` + (c.comodin ? " (comodín ×2)" : ""),

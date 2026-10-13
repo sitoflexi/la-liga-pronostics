@@ -201,11 +201,13 @@
   }
 
   function renderPlayers() {
-    D.bote = D.bote || {};
+    D.boteAjuste = D.boteAjuste || {};
+    const S = window.LIGA.compute(D);
     const rows = D.players.map((p) => {
-      const n = el("input", { type: "number", step: "0.5", min: "0", value: D.bote[p] ?? 0 });
-      n.addEventListener("input", () => { D.bote[p] = Number(n.value) || 0; setDirty(); });
-      return el("tr", {}, el("td", {}, p), el("td", {}, n, " €"));
+      const t = S.table.find((x) => x.name === p);
+      const n = el("input", { type: "number", step: "0.5", value: D.boteAjuste[p] ?? 0 });
+      n.addEventListener("input", () => { const v = Number(n.value) || 0; if (v) D.boteAjuste[p] = v; else delete D.boteAjuste[p]; setDirty(); });
+      return el("tr", {}, el("td", {}, p), el("td", { class: "muted" }, `${t.lost} × ${window.LIGA.BOTE_POR_JORNADA} € = ${t.lost * window.LIGA.BOTE_POR_JORNADA} €`), el("td", {}, "ajuste ", n, " €"));
     });
     $("#plTable").replaceChildren(el("tbody", {}, rows));
   }
@@ -226,7 +228,7 @@
     e.preventDefault();
     const name = $("#newP").value.trim().toUpperCase();
     if (!name || D.players.includes(name)) return;
-    D.players.push(name); D.bote[name] = 0; $("#newP").value = "";
+    D.players.push(name); $("#newP").value = "";
     setDirty(); renderPreds(); renderPlayers();
   });
 

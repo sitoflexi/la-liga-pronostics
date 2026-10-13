@@ -21,25 +21,6 @@
   "SITO",
   "VEGA"
  ],
- "bote": {
-  "SITO": 6,
-  "DANI": 6,
-  "MOUNIR": 6,
-  "VEGA": 6,
-  "JAN": 6,
-  "FELIX": 3,
-  "OSCAR": 3,
-  "JON": 3,
-  "IKER": 3,
-  "DE PAZ": 3,
-  "MINI": 3,
-  "GELI": 3,
-  "EDGAR": 3,
-  "ALEIX": 3,
-  "DAVID": 3,
-  "ADRIÀ": 3,
-  "JOEL": 0
- },
  "jornadas": [
   {
    "n": 1,
@@ -2186,5 +2167,6 @@
    "preds": {},
    "comodin": {}
   }
- ]
+ ],
+ "boteAjuste": {}
 }
