@@ -2,6 +2,7 @@
 // Resultado exacto = 5, acertar el signo (1X2) = 2, nada = 0. El comodín dobla.
 window.LIGA = (() => {
   const PTS = { exact: 5, sign: 2, miss: 0 };
+  const HALTED = ["aplazado", "suspendido"];
 
   function parseScore(s) {
     if (s == null) return null;
@@ -25,7 +26,10 @@ window.LIGA = (() => {
     const players = data.players;
     const js = data.jornadas.map((j) => {
       const played = j.matches.filter((m) => parseScore(m.result)).length;
-      const complete = played === j.matches.length && played > 0;
+      const postponed = j.matches.filter((m) => !parseScore(m.result) && HALTED.includes(m.status)).length;
+      // un partido aplazado o suspendido no impide cerrar la jornada; si se juega luego, sus puntos se suman igual
+      const complete = played > 0 && played + postponed === j.matches.length;
+      const dates = j.matches.map((m) => m.date).filter(Boolean).sort();
       const rows = {};
       for (const p of players) {
         const preds = (j.preds && j.preds[p]) || [];
@@ -46,7 +50,7 @@ window.LIGA = (() => {
       }
       const max = Math.max(...players.map((p) => rows[p].pts));
       const winners = complete && max > 0 ? players.filter((p) => rows[p].pts === max) : [];
-      return { n: j.n, j, played, complete, started: played > 0, rows, max, winners };
+      return { n: j.n, j, played, postponed, complete, started: played > 0, rows, max, winners, firstDate: dates[0] || null };
     });
 
     const active = js.filter((x) => x.started);
@@ -79,5 +83,21 @@ window.LIGA = (() => {
     return { jornadas: js, active, table };
   }
 
-  return { PTS, parseScore, norm, show, outcome, compute };
+  // "vie 17 · 21:00" en hora local de quien lo mira
+  function when(iso, withTime = true) {
+    if (!iso) return "";
+    const d = new Date(iso);
+    if (isNaN(d)) return "";
+    const day = d.toLocaleDateString("es-ES", { weekday: "short", day: "numeric", month: "short" }).replace(/[.,]/g, "");
+    return withTime ? `${day} · ${d.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" })}` : day;
+  }
+
+  // Etiqueta de un partido sin resultado: "aplazado", "suspendido", "pendiente" (va con retraso) o null (normal)
+  function matchState(m, jornadaStarted) {
+    if (parseScore(m.result)) return null;
+    if (HALTED.includes(m.status)) return m.status;
+    return jornadaStarted ? "pendiente" : null;
+  }
+
+  return { PTS, HALTED, parseScore, norm, show, outcome, compute, when, matchState };
 })();

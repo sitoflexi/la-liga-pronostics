@@ -1,5 +1,5 @@
 (() => {
-  const { compute, show } = window.LIGA;
+  const { compute, show, when, matchState } = window.LIGA;
   const $ = (s) => document.querySelector(s);
   const el = (tag, attrs = {}, ...kids) => {
     const e = document.createElement(tag);
@@ -40,7 +40,9 @@
   function renderTiles(data) {
     const t = S.table, lead = t[0], second = t.find((x) => x.total < lead.total);
     const leaders = t.filter((x) => x.total === lead.total).map((x) => x.name).join(" · ");
-    const live = [...S.active].reverse().find((x) => !x.complete) || S.active[S.active.length - 1];
+    const last = S.active[S.active.length - 1];
+    const live = last && !last.complete ? last : null; // una jornada vieja con un partido reprogramado no cuenta
+    const next = S.jornadas.find((x) => !x.started);
     let best = null;
     for (const x of S.active) for (const p of data.players) {
       const pts = x.rows[p].pts;
@@ -51,8 +53,9 @@
     const tile = (k, v, d) => el("div", { class: "tile" }, el("div", { class: "k" }, k), el("div", { class: "v" }, v), el("div", { class: "d" }, d));
     $("#tiles").replaceChildren(
       tile("Líder", leaders, `${lead.total} pts` + (second ? ` · +${lead.total - second.total} sobre el siguiente` : "")),
-      tile(live && !live.complete ? "Jornada en curso" : "Última jornada", live ? `J${live.n}` : "—",
-        live ? `${live.played} de ${live.j.matches.length} partidos jugados` : ""),
+      live ? tile("Jornada en curso", `J${live.n}`, `${live.played} de ${live.j.matches.length} partidos jugados`)
+        : next ? tile("Próxima jornada", `J${next.n}`, next.firstDate ? `Empieza el ${when(next.firstDate)}` : "Fechas por confirmar")
+        : tile("Última jornada", last ? `J${last.n}` : "—", ""),
       tile("Mejor jornada", best ? `${best.pts} pts` : "—", best ? `${best.who.join(" · ")} en la J${best.n}` : ""),
       tile("Bote acumulado", `${bote.toLocaleString("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`, `${data.players.length} jugadores`),
     );
@@ -168,12 +171,17 @@
     $("#jSel").replaceChildren(...S.jornadas.map((j) =>
       el("button", { "aria-pressed": String(j.n === curJ), onclick: () => { curJ = j.n; renderJornada(); } }, `J${j.n}`)));
     $("#jTitle").replaceChildren(`Jornada ${x.n} `,
-      x.complete ? "" : el("span", { class: "badge" }, x.started ? `en curso · ${x.played}/${x.j.matches.length}` : "sin empezar"));
+      x.complete ? (x.postponed ? el("span", { class: "badge" }, `${x.postponed} sin jugar`) : "")
+        : el("span", { class: "badge" }, x.started ? `en curso · ${x.played}/${x.j.matches.length}` : x.firstDate ? `empieza el ${when(x.firstDate)}` : "sin empezar"));
     const head = el("tr", {}, el("th", { class: "name" }, "Jugador"),
-      x.j.matches.map((mt) => el("th", { class: "match" }, mt.home, el("small", {}, mt.away))),
+      x.j.matches.map((mt) => el("th", { class: "match", title: when(mt.date) }, mt.home, el("small", {}, mt.away),
+        mt.date && !mt.result ? el("small", { class: "when" }, when(mt.date)) : null)),
       el("th", {}, "Pts"));
     const res = el("tr", { class: "result" }, el("td", { class: "name" }, "Resultado"),
-      x.j.matches.map((mt) => el("td", {}, mt.result ? show(mt.result) : "–")), el("td", {}, ""));
+      x.j.matches.map((mt) => {
+        const st = matchState(mt, x.started);
+        return el("td", {}, mt.result ? show(mt.result) : st ? el("span", { class: `badge st-${st}`, title: mt.date ? when(mt.date) : "" }, st) : "–");
+      }), el("td", {}, ""));
     const order = [...S.table].map((t) => t.name).sort((a, b) => x.rows[b].pts - x.rows[a].pts || a.localeCompare(b));
     const rows = order.map((p) => {
       const r = x.rows[p];
@@ -185,6 +193,25 @@
         el("td", { class: "total" }, r.predicted ? r.pts : "–"));
     });
     $("#jTable").replaceChildren(el("thead", {}, head, res), el("tbody", {}, rows));
+    renderPending();
+  }
+
+  // Partidos de jornadas ya empezadas que siguen sin resultado
+  function renderPending() {
+    const items = [];
+    for (const x of S.jornadas) {
+      if (!x.started) continue;
+      x.j.matches.forEach((mt) => {
+        const st = matchState(mt, true);
+        // en la jornada en curso solo cuentan los parados; los demás simplemente no se han jugado aún
+        if (!st || (!x.complete && st === "pendiente" && x === S.active[S.active.length - 1])) return;
+        items.push(el("li", {}, el("span", { class: `badge st-${st}` }, st), ` J${x.n} · ${mt.home} - ${mt.away}`,
+          mt.date && st !== "suspendido" ? el("span", { class: "muted" }, ` · ${when(mt.date)}`) : null));
+      });
+    }
+    const box = $("#pending");
+    box.hidden = !items.length;
+    box.replaceChildren(el("b", {}, "Partidos atrasados"), el("span", { class: "muted" }, " — sus puntos se sumarán cuando se jueguen"), el("ul", {}, items));
   }
 
   // ---------- Tipo de acierto / comodín ----------

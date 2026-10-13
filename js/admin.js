@@ -150,7 +150,8 @@
     const rows = j.matches.map((m, i) => {
       const team = (k) => { const t = el("input", { type: "text", class: "team", value: m[k] }); t.addEventListener("input", () => { m[k] = t.value.trim().toUpperCase(); setDirty(); renderPredHead(); }); return t; };
       return el("tr", {}, el("td", {}, i + 1), el("td", {}, team("home")), el("td", {}, team("away")),
-        el("td", {}, scoreInput(m.result, (v) => { m.result = v; })),
+        el("td", {}, scoreInput(m.result, (v) => { m.result = v; if (v) delete m.status; }),
+          window.LIGA.HALTED.includes(m.status) && !m.result ? el("span", { class: "badge" }, ` ${m.status}`) : null),
         el("td", {}, el("button", { type: "button", title: "Quitar partido", onclick: () => removeMatch(i) }, "✕")));
     });
     $("#mTable").replaceChildren(el("thead", {}, head), el("tbody", {}, rows));
