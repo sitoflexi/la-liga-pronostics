@@ -17,11 +17,18 @@
     <div class="meta" id="updated">Cargando…</div>
   </header>
 
+  <nav class="tabs" role="tablist" aria-label="Secciones">
+    <a role="tab" href="#clasificacion" data-tab="clasificacion">Clasificación</a>
+    <a role="tab" href="#jornadas" data-tab="jornadas">Jornadas</a>
+    <a role="tab" href="#estadisticas" data-tab="estadisticas">Estadísticas</a>
+  </nav>
+
+  <div class="tabpanel" data-panel="clasificacion">
   <div class="tiles" id="tiles"></div>
 
-  <section class="card" id="clasificacion">
+  <section class="card">
     <h2>Clasificación</h2>
-    <p class="hint">Puntos por jornada (más oscuro = más puntos). 👑 = ganó la jornada. Jornada rayada = en curso. Toca un jugador para seguirlo en la evolución.</p>
+    <p class="hint">Puntos por jornada (color más intenso = más puntos). 👑 = ganó la jornada. Jornada rayada = en curso. Toca un jugador para seguirlo en la evolución.</p>
     <div class="scroll-x"><table id="tabla"></table></div>
   </section>
 
@@ -36,7 +43,9 @@
     <div class="chips" id="evoChips"></div>
     <div class="chart" id="evoChart"></div>
   </section>
+  </div>
 
+  <div class="tabpanel" data-panel="jornadas" hidden>
   <section class="card" id="jornada">
     <div class="row-head">
       <h2 id="jTitle">Jornada</h2>
@@ -50,7 +59,9 @@
       <span><b style="border:2px solid currentColor;border-radius:3px;padding:0 4px">2 - 1<sup>×2</sup></b> Comodín: puntos dobles</span>
     </div>
   </section>
+  </div>
 
+  <div class="tabpanel" data-panel="estadisticas" hidden>
   <div class="two">
     <section class="card">
       <h2>Tipo de acierto</h2>
@@ -74,6 +85,7 @@
     <p class="hint">Datos de todos los partidos jugados de la temporada.</p>
     <div class="facts" id="facts"></div>
   </section>
+  </div>
 
   <footer>Datos gestionados por los admins · <a href="admin.html">Admin</a></footer>
 </div>

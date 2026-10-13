@@ -259,6 +259,17 @@
     document.querySelectorAll("#evoMode button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
     renderEvo();
   }));
+  // ---------- Pestañas (#clasificacion, #jornadas, #estadisticas) ----------
+  const TABS = ["clasificacion", "jornadas", "estadisticas"];
+  function showTab() {
+    const t = TABS.includes(location.hash.slice(1)) ? location.hash.slice(1) : TABS[0];
+    document.querySelectorAll(".tabs a").forEach((a) => a.setAttribute("aria-selected", String(a.dataset.tab === t)));
+    document.querySelectorAll(".tabpanel").forEach((p) => { p.hidden = p.dataset.panel !== t; });
+    if (t === "clasificacion" && S) renderEvo(); // el gráfico se dimensiona con el ancho visible
+  }
+  window.addEventListener("hashchange", () => { showTab(); window.scrollTo(0, 0); });
+  showTab();
+
   let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => S && renderEvo(), 120); });
   load();
 })();
