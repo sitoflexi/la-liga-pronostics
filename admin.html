@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Admin · La Liga Pronòstics</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔒</text></svg>">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .form { display: grid; gap: 10px; max-width: 460px; }
+  .form label { display: grid; gap: 4px; font-size: 13px; color: var(--ink-2); }
+  .bar-top { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; position: sticky; top: 0; z-index: 10;
+    background: var(--page); padding: 10px 0; border-bottom: 1px solid var(--grid); margin-bottom: 16px; }
+  .bar-top .grow { flex: 1; }
+  #status { font-size: 13px; }
+  .mt input { width: 72px; text-align: center; }
+  .mt input.team { width: 84px; text-transform: uppercase; }
+  .pg td { padding: 3px; }
+  .pg .pc { display: flex; align-items: center; gap: 2px; justify-content: center; }
+  .pg input { width: 56px; text-align: center; padding: 4px; }
+  .pg input.bad, .mt input.bad { border-color: var(--miss); background: var(--miss-bg); }
+  .pg input[type=radio] { width: auto; margin: 0; accent-color: var(--accent); }
+  .pg td.has-com input[type=text] { font-weight: 800; border-width: 2px; border-color: var(--ink-2); }
+  .players td { text-align: left; }
+  .players input[type=number] { width: 80px; }
+  ol.steps { padding-left: 20px; color: var(--ink-2); }
+  ol.steps li { margin: 4px 0; }
+  .hidden { display: none !important; }
+  code { background: var(--pending-bg); padding: 1px 5px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Admin</h1>
+      <div class="sub">La Liga · Pronòstics</div>
+    </div>
+    <div class="meta"><a href="./">← Volver al dashboard</a></div>
+  </header>
+
+  <!-- Login -->
+  <section class="card hidden" id="vLogin">
+    <h2>Entrar</h2>
+    <p class="hint">Introduce la contraseña de admin.</p>
+    <form class="form" id="fLogin">
+      <input type="password" id="pw" autocomplete="current-password" placeholder="Contraseña" required>
+      <div><button class="primary" type="submit">Entrar</button> <span id="loginMsg"></span></div>
+    </form>
+    <p class="hint" style="margin-top:18px"><a href="#" id="toSetup">Configurar un token nuevo</a> (si ha caducado o es la primera vez).</p>
+  </section>
+
+  <!-- Configuración inicial -->
+  <section class="card hidden" id="vSetup">
+    <h2>Configuración inicial</h2>
+    <p class="hint">Solo se hace una vez (y cuando caduque el token). El token se guarda cifrado con la contraseña; sin ella no sirve de nada.</p>
+    <ol class="steps">
+      <li>Abre <a target="_blank" rel="noopener" href="https://github.com/settings/personal-access-tokens/new">GitHub → Fine-grained token nuevo</a> con la cuenta dueña del repo.</li>
+      <li>Nombre: <code>liga-admin</code>. Caducidad: la máxima que permita (1 año).</li>
+      <li>Repository access → <b>Only select repositories</b> → <code>la-liga-pronostics</code>.</li>
+      <li>Permissions → Repository → <b>Contents: Read and write</b>. Nada más.</li>
+      <li>Genera el token, pégalo aquí y elige una contraseña larga (mín. 12 caracteres).</li>
+    </ol>
+    <form class="form" id="fSetup">
+      <label>Token<input type="password" id="sToken" placeholder="github_pat_…" required autocomplete="off"></label>
+      <label>Contraseña de admin<input type="password" id="sPw" minlength="12" required autocomplete="new-password"></label>
+      <label>Repite la contraseña<input type="password" id="sPw2" minlength="12" required autocomplete="new-password"></label>
+      <div><button class="primary" type="submit">Guardar configuración</button> <span id="setupMsg"></span></div>
+    </form>
+  </section>
+
+  <!-- Editor -->
+  <div id="vEdit" class="hidden">
+    <div class="bar-top">
+      <select id="jSel" aria-label="Jornada"></select>
+      <button id="newJ">+ Nueva jornada</button>
+      <span class="grow"></span>
+      <span id="status"></span>
+      <button class="primary" id="save">Guardar cambios</button>
+    </div>
+
+    <section class="card">
+      <h2 id="mTitle">Partidos y resultados</h2>
+      <p class="hint">Formato del resultado: <code>2-1</code>. Déjalo vacío si el partido aún no se ha jugado.</p>
+      <div class="scroll-x"><table class="mt" id="mTable"></table></div>
+      <div style="margin-top:10px"><button id="addM">+ Añadir partido</button></div>
+    </section>
+
+    <section class="card">
+      <h2>Pronósticos</h2>
+      <p class="hint">Un pronóstico por casilla (<code>2-1</code>). El círculo marca el <b>comodín</b> del jugador (puntos ×2); uno por jugador y jornada.</p>
+      <div class="scroll-x"><table class="pg" id="pTable"></table></div>
+    </section>
+
+    <section class="card">
+      <h2>Jugadores y bote</h2>
+      <p class="hint">Bote acumulado de cada jugador en euros.</p>
+      <table class="players" id="plTable" style="max-width:420px"></table>
+      <form id="fAddP" style="margin-top:10px;display:flex;gap:8px">
+        <input type="text" id="newP" placeholder="Nombre del nuevo jugador">
+        <button type="submit">Añadir</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Sesión</h2>
+      <p class="hint">Cambiar la contraseña cifra el mismo token con la nueva contraseña.</p>
+      <form class="form" id="fPw">
+        <label>Nueva contraseña<input type="password" id="nPw" minlength="12" required autocomplete="new-password"></label>
+        <div><button type="submit">Cambiar contraseña</button> <button type="button" id="logout">Cerrar sesión</button> <span id="pwMsg"></span></div>
+      </form>
+    </section>
+  </div>
+</div>
+<script src="js/config.js"></script>
+<script src="js/core.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

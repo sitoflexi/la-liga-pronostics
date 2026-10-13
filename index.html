@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La Liga Pronòstics</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>La Liga · Pronòstics</h1>
+      <div class="sub" id="season">—</div>
+    </div>
+    <div class="meta" id="updated">Cargando…</div>
+  </header>
+
+  <div class="tiles" id="tiles"></div>
+
+  <section class="card" id="clasificacion">
+    <h2>Clasificación</h2>
+    <p class="hint">Puntos por jornada (más oscuro = más puntos). 👑 = ganó la jornada. Jornada rayada = en curso. Toca un jugador para seguirlo en la evolución.</p>
+    <div class="scroll-x"><table id="tabla"></table></div>
+  </section>
+
+  <section class="card" id="evolucion">
+    <div class="row-head">
+      <h2>Evolución</h2>
+      <div class="seg" id="evoMode">
+        <button aria-pressed="true" data-m="pts">Puntos acumulados</button>
+        <button aria-pressed="false" data-m="pos">Posición</button>
+      </div>
+    </div>
+    <div class="chips" id="evoChips"></div>
+    <div class="chart" id="evoChart"></div>
+  </section>
+
+  <section class="card" id="jornada">
+    <div class="row-head">
+      <h2 id="jTitle">Jornada</h2>
+      <div class="seg" id="jSel"></div>
+    </div>
+    <div class="scroll-x"><table class="jgrid" id="jTable"></table></div>
+    <div class="legend">
+      <span><span class="sw" style="background:var(--exact)"></span>Resultado exacto · 5 pts</span>
+      <span><span class="sw" style="background:var(--sign)"></span>Signo (1X2) · 2 pts</span>
+      <span><span class="sw" style="background:var(--miss)"></span>Sin acierto · 0 pts</span>
+      <span><b style="border:2px solid currentColor;border-radius:3px;padding:0 4px">2 - 1<sup>×2</sup></b> Comodín: puntos dobles</span>
+    </div>
+  </section>
+
+  <div class="two">
+    <section class="card">
+      <h2>Tipo de acierto</h2>
+      <p class="hint">Reparto de los partidos ya jugados de cada uno. Ordenado por % de acierto (exacto + signo).</p>
+      <div id="stack"></div>
+      <div class="legend">
+        <span><span class="sw" style="background:var(--exact)"></span>Exacto</span>
+        <span><span class="sw" style="background:var(--sign)"></span>Signo</span>
+        <span><span class="sw" style="background:var(--miss)"></span>Fallo</span>
+      </div>
+    </section>
+    <section class="card">
+      <h2>Rendimiento del comodín</h2>
+      <p class="hint">Puntos sumados con el comodín (ya doblados) y comodines que dieron puntos.</p>
+      <div id="comodin"></div>
+    </section>
+  </div>
+
+  <section class="card">
+    <h2>Curiosidades</h2>
+    <p class="hint">Datos de todos los partidos jugados de la temporada.</p>
+    <div class="facts" id="facts"></div>
+  </section>
+
+  <footer>Datos gestionados por los admins · <a href="admin.html">Admin</a></footer>
+</div>
+<script src="js/core.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>
