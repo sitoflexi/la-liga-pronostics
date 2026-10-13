@@ -1,7 +1,7 @@
 {
  "season": "26/27 · 1a volta",
- "updated": "2026-10-13T09:06:20+00:00",
- "updatedBy": "Importado de la hoja LA LIGA - PRONÒSTICS",
+ "updated": "2026-10-13T09:35:16Z",
+ "updatedBy": "Bot de resultados",
  "players": [
   "ADRIÀ",
   "ALEIX",
@@ -1265,52 +1265,62 @@
     {
      "home": "RSO",
      "away": "CEL",
-     "result": "0-0"
+     "result": "0-0",
+     "date": "2026-09-03T19:00:00Z"
     },
     {
      "home": "RAY",
      "away": "ESP",
-     "result": "2-1"
+     "result": "2-1",
+     "date": "2026-09-15T17:00:00Z"
     },
     {
      "home": "ALA",
      "away": "VAL",
-     "result": "0-1"
+     "result": "0-1",
+     "date": "2026-09-15T18:00:00Z"
     },
     {
      "home": "ELC",
      "away": "RMA",
-     "result": "2-3"
+     "result": "2-3",
+     "date": "2026-09-15T19:30:00Z"
     },
     {
      "home": "ATM",
      "away": "OSA",
-     "result": "4-0"
+     "result": "4-0",
+     "date": "2026-09-16T17:00:00Z"
     },
     {
      "home": "DEP",
      "away": "SEV",
-     "result": "0-1"
+     "result": "0-1",
+     "date": "2026-09-16T17:00:00Z"
     },
     {
      "home": "FCB",
      "away": "RAC",
-     "result": "7-2"
+     "result": "7-2",
+     "date": "2026-09-16T19:30:00Z"
     },
     {
      "home": "LEV",
      "away": "ATH",
-     "result": null
+     "result": null,
+     "date": "2026-10-21T18:00:00Z"
     },
     {
      "home": "BET",
      "away": "GET",
-     "result": "1-0"
+     "result": "1-0",
+     "date": "2026-09-17T17:00:00Z"
     },
     {
      "home": "MAL",
      "away": "VIL",
-     "result": "1-3"
+     "result": "1-3",
+     "date": "2026-09-17T19:30:00Z"
     }
    ],
    "preds": {
@@ -1824,52 +1834,63 @@
     {
      "home": "MAL",
      "away": "ESP",
-     "result": "1-1"
+     "result": "1-1",
+     "date": "2026-10-09T19:00:00Z"
     },
     {
      "home": "RAY",
      "away": "ATH",
-     "result": null
+     "result": null,
+     "date": "2026-10-10T12:00:00Z",
+     "status": "suspendido"
     },
     {
      "home": "ALA",
      "away": "ATM",
-     "result": "1-2"
+     "result": "1-2",
+     "date": "2026-10-10T14:15:00Z"
     },
     {
      "home": "FCB",
      "away": "GET",
-     "result": "3-0"
+     "result": "3-0",
+     "date": "2026-10-10T16:30:00Z"
     },
     {
      "home": "RMA",
      "away": "VIL",
-     "result": "1-0"
+     "result": "1-0",
+     "date": "2026-10-10T19:00:00Z"
     },
     {
      "home": "ELC",
      "away": "CEL",
-     "result": "0-0"
+     "result": "0-0",
+     "date": "2026-10-11T12:00:00Z"
     },
     {
      "home": "RSO",
      "away": "DEP",
-     "result": "3-2"
+     "result": "3-2",
+     "date": "2026-10-11T14:15:00Z"
     },
     {
      "home": "BET",
      "away": "OSA",
-     "result": "5-2"
+     "result": "5-2",
+     "date": "2026-10-11T16:30:00Z"
     },
     {
      "home": "RAC",
      "away": "VAL",
-     "result": "2-2"
+     "result": "2-2",
+     "date": "2026-10-11T19:00:00Z"
     },
     {
      "home": "LEV",
      "away": "SEV",
-     "result": null
+     "result": "3-3",
+     "date": "2026-10-12T19:00:00Z"
     }
    ],
    "preds": {
@@ -2097,6 +2118,73 @@
     "SITO": 3,
     "VEGA": 3
    }
+  },
+  {
+   "n": 9,
+   "matches": [
+    {
+     "home": "DEP",
+     "away": "LEV",
+     "result": null,
+     "date": "2026-10-16T19:00:00Z"
+    },
+    {
+     "home": "ESP",
+     "away": "ATM",
+     "result": null,
+     "date": "2026-10-17T12:00:00Z"
+    },
+    {
+     "home": "VIL",
+     "away": "ELC",
+     "result": null,
+     "date": "2026-10-17T14:15:00Z"
+    },
+    {
+     "home": "BET",
+     "away": "FCB",
+     "result": null,
+     "date": "2026-10-17T16:30:00Z"
+    },
+    {
+     "home": "VAL",
+     "away": "ATH",
+     "result": null,
+     "date": "2026-10-17T19:00:00Z"
+    },
+    {
+     "home": "OSA",
+     "away": "RAC",
+     "result": null,
+     "date": "2026-10-18T12:00:00Z"
+    },
+    {
+     "home": "CEL",
+     "away": "ALA",
+     "result": null,
+     "date": "2026-10-18T14:15:00Z"
+    },
+    {
+     "home": "MAL",
+     "away": "RSO",
+     "result": null,
+     "date": "2026-10-18T16:30:00Z"
+    },
+    {
+     "home": "RMA",
+     "away": "SEV",
+     "result": null,
+     "date": "2026-10-18T19:00:00Z"
+    },
+    {
+     "home": "GET",
+     "away": "RAY",
+     "result": null,
+     "date": "2026-10-19T19:00:00Z"
+    }
+   ],
+   "preds": {},
+   "comodin": {}
   }
  ]
 }
