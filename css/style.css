@@ -34,7 +34,7 @@
     --sign-bg: #45360f; --sign-ink: #f7d27a;
     --miss-bg: #4a1c1c; --miss-ink: #f2a3a3;
     --pending-bg: #262624;
-    --heat-0: #262624; --heat-1: #184f95; --heat-2: #1c5cab; --heat-3: #256abf; --heat-4: #2a78d6; --heat-5: #3987e5;
+    --heat-0: #262624; --heat-1: #13294a; --heat-2: #173f72; --heat-3: #1c5cab; --heat-4: #2a78d6; --heat-5: #5598e7;
   }
 }
 :root[data-theme="dark"] {
@@ -49,7 +49,7 @@
   --sign-bg: #45360f; --sign-ink: #f7d27a;
   --miss-bg: #4a1c1c; --miss-ink: #f2a3a3;
   --pending-bg: #262624;
-  --heat-0: #262624; --heat-1: #184f95; --heat-2: #1c5cab; --heat-3: #256abf; --heat-4: #2a78d6; --heat-5: #3987e5;
+  --heat-0: #262624; --heat-1: #13294a; --heat-2: #173f72; --heat-3: #1c5cab; --heat-4: #2a78d6; --heat-5: #5598e7;
 }
 
 * { box-sizing: border-box; }
@@ -152,6 +152,7 @@ button:disabled { opacity: .5; cursor: default; }
 .stackrow .bar span { display: block; height: 100%; min-width: 0; }
 .stackrow .bar span:first-child { border-radius: 4px 0 0 4px; }
 .stackrow .bar span:last-child { border-radius: 0 4px 4px 0; }
+#comodin .stackrow { grid-template-columns: 74px 1fr 76px; }
 .stackrow .v { text-align: right; color: var(--ink-2); font-variant-numeric: tabular-nums; }
 
 .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }

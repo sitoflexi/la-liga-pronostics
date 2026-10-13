@@ -220,7 +220,7 @@
     const byExact = [...games].sort((a, b) => b.exact - a.exact);
     if (byExact[0]) facts.push(["Partido más clavado", label(byExact[0]), `${byExact[0].exact} de ${byExact[0].n} acertaron el resultado exacto`]);
     const surprise = [...games].sort((a, b) => a.hit / a.n - b.hit / b.n || b.n - a.n)[0];
-    if (surprise) facts.push(["El que nadie vio venir", label(surprise), `solo ${surprise.hit} de ${surprise.n} acertaron el signo`]);
+    if (surprise) facts.push(["El que nadie vio venir", label(surprise), surprise.hit ? `solo ${surprise.hit} de ${surprise.n} acertaron el signo` : `ninguno de los ${surprise.n} acertó el signo`]);
     const sniper = [...S.table].sort((a, b) => b.exact - a.exact)[0];
     if (sniper) facts.push(["Francotirador", sniper.name, `${sniper.exact} resultados exactos en la temporada`]);
     const comBest = [...S.table].sort((a, b) => b.comPts - a.comPts)[0];
