@@ -92,6 +92,7 @@
       return tr;
     });
     $("#tabla").replaceChildren(el("thead", {}, head), el("tbody", {}, rows));
+    refit();
   }
 
   // ---------- Evolución ----------
@@ -195,6 +196,7 @@
         el("td", { class: "total" }, r.predicted ? r.pts : "–"));
     });
     $("#jTable").replaceChildren(el("thead", {}, head, res), el("tbody", {}, rows));
+    refit();
     renderPending();
   }
 
@@ -307,8 +309,22 @@
     const root = document.documentElement;
     if (on && root.requestFullscreen && !document.fullscreenElement) root.requestFullscreen().catch(() => {});
     if (!on && document.fullscreenElement) document.exitFullscreen().catch(() => {});
-    if (card.id === "clasif" && S) renderEvo();
+    fit(card);
   }
+  // En pantalla completa la tabla se reduce entera para que quepa en la pantalla, como una imagen
+  function fit(card) {
+    const box = card.querySelector(".scroll-x"), t = box.querySelector("table");
+    t.style.transform = ""; box.style.width = ""; box.style.height = "";
+    if (!card.classList.contains("is-full")) return;
+    const w = t.offsetWidth, h = t.offsetHeight;
+    const cs = getComputedStyle(card);
+    const availW = card.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    const availH = window.innerHeight - box.getBoundingClientRect().top - parseFloat(cs.paddingBottom);
+    const k = Math.min(availW / w, availH / h, 1.6);
+    t.style.transform = `scale(${k})`;
+    box.style.width = `${w * k}px`; box.style.height = `${h * k}px`;
+  }
+  function refit() { document.querySelectorAll(".fs-able.is-full").forEach(fit); }
   document.querySelectorAll(".fs-able").forEach((card) =>
     card.querySelector(".fs-btn").addEventListener("click", () => setFull(card, !card.classList.contains("is-full"))));
   const closeFull = () => document.querySelectorAll(".fs-able.is-full").forEach((c) => setFull(c, false));
@@ -331,6 +347,6 @@
   window.addEventListener("hashchange", () => { closeFull(); showTab(); window.scrollTo(0, 0); });
   showTab();
 
-  let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => S && renderEvo(), 120); });
+  let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { if (S) renderEvo(); refit(); }, 120); });
   load();
 })();

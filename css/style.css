@@ -186,14 +186,16 @@ tr.bottom td.pos, tr.bottom td.name { background: var(--miss-bg); color: var(--m
 tr.bottom td.pos { box-shadow: inset 4px 0 0 var(--miss); }
 tr.bottom.sel td.name { box-shadow: inset 4px 0 0 var(--selc, var(--accent)); }
 
-/* Pantalla completa */
+/* Pantalla completa: la tabla entera reducida para caber en la pantalla (js: fit) */
 .fs-btn { font-size: 13px; padding: 4px 10px; white-space: nowrap; }
 .jsel { margin: -4px 0 12px; }
-.fs-able.is-full { position: fixed; inset: 0; z-index: 100; margin: 0; border-radius: 0; border: 0;
-  overflow: auto; padding: 20px max(16px, env(safe-area-inset-right)) 24px max(16px, env(safe-area-inset-left)); }
-.fs-able.is-full table { font-size: 17px; }
-.fs-able.is-full th { font-size: 14px; }
-.fs-able.is-full td.total { font-size: 20px; }
-.fs-able.is-full .row-head h2 { font-size: 22px; }
+.fs-able.is-full { position: fixed; inset: 0; z-index: 100; margin: 0; border-radius: 0; border: 0; overflow: hidden;
+  padding: max(10px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left)); }
+.fs-able.is-full .row-head { margin-bottom: 6px; }
+.fs-able.is-full .hint, .fs-able.is-full .legend { display: none; }
+.fs-able.is-full .jsel { margin: 0 0 6px; }
+.fs-able.is-full .scroll-x { overflow: visible; margin: 0 auto; }
+.fs-able.is-full table { width: max-content; transform-origin: 0 0; }
+.fs-able.is-full td.name, .fs-able.is-full th.name { position: static; }
 body.has-full { overflow: hidden; }
 body.has-full .tabs { visibility: hidden; }
