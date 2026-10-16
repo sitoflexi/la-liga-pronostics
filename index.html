@@ -24,11 +24,12 @@
   </nav>
 
   <div class="tabpanel" data-panel="clasificacion">
-  <div class="tiles" id="tiles"></div>
-
-  <section class="card">
-    <h2>Clasificación</h2>
-    <p class="hint">Puntos por jornada (color más intenso = más puntos). 👑 = ganó la jornada. 💸 = último de la jornada (+3 € al bote). Jornada rayada = en curso. Toca un jugador para seguirlo en la evolución.</p>
+  <section class="card fs-able" id="clasif">
+    <div class="row-head">
+      <h2>Clasificación</h2>
+      <button class="fs-btn" type="button" aria-pressed="false" title="Pantalla completa">⛶ Pantalla completa</button>
+    </div>
+    <p class="hint">Puntos por jornada (color más intenso = más puntos). 👑 = ganó la jornada. 💸 = último de la jornada (+3 € al bote). Jornada rayada = en curso. Rojo = los 3 últimos. Toca un jugador para seguirlo en la evolución.</p>
     <div class="scroll-x"><table id="tabla"></table></div>
   </section>
 
@@ -47,11 +48,12 @@
 
   <div class="tabpanel" data-panel="jornadas" hidden>
   <div class="notice" id="pending" hidden></div>
-  <section class="card" id="jornada">
+  <section class="card fs-able" id="jornada">
     <div class="row-head">
       <h2 id="jTitle">Jornada</h2>
-      <div class="seg" id="jSel"></div>
+      <button class="fs-btn" type="button" aria-pressed="false" title="Pantalla completa">⛶ Pantalla completa</button>
     </div>
+    <div class="seg jsel" id="jSel"></div>
     <div class="scroll-x"><table class="jgrid" id="jTable"></table></div>
     <div class="legend">
       <span><span class="sw" style="background:var(--exact)"></span>Resultado exacto · 5 pts</span>
@@ -63,6 +65,8 @@
   </div>
 
   <div class="tabpanel" data-panel="estadisticas" hidden>
+  <div class="tiles" id="tiles"></div>
+
   <div class="two">
     <section class="card">
       <h2>Tipo de acierto</h2>

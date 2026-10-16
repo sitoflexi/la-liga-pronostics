@@ -22,7 +22,10 @@ uno nuevo y se vuelve a configurar desde el mismo panel.
 `scripts/import_sheet.py` es el import inicial desde la hoja de Google (pestaña 26/27 JORNADES).
 
 ## Automático
-La GitHub Action `Resultados automáticos` (cada 2 h) rellena los resultados desde
+La GitHub Action `Resultados automáticos` (cada 10 min, pero solo consulta cuando algún partido
+ha podido terminar, y a las 6 y 18 UTC) rellena los resultados desde
 TheSportsDB, marca partidos aplazados/suspendidos y, cuando la última jornada ya no tiene
 partidos por jugar, crea la siguiente (calendario de respaldo: openfootball).
 Nunca sobrescribe un resultado ya puesto. Se puede lanzar a mano desde la pestaña Actions.
+
+La web comprueba `data.json` cada 2 minutos y se refresca sola si hay datos nuevos.

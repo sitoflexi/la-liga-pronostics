@@ -1,11 +1,14 @@
 """Actualiza data.json solo: rellena resultados y crea la siguiente jornada.
 
-Lo ejecuta la GitHub Action .github/workflows/resultados.yml cada 2 horas.
+Lo ejecuta la GitHub Action .github/workflows/resultados.yml cada 10 minutos con --si-toca:
+solo consulta la API cuando algún partido ha podido terminar (empezó hace 1 h 45 min - 24 h y no tiene
+resultado), así el resultado aparece poco después de cada partido. Además hace una pasada completa
+a las 6 y a las 18 UTC (cambios de horario, jornada nueva) aunque no haya partidos.
 - Resultados y estado de cada partido: TheSportsDB (gratis, sin registro).
 - Calendario de respaldo para crear jornadas: openfootball/football.json.
 Nunca sobrescribe un resultado que ya esté puesto (lo que mete un admin manda).
 
-Uso: python scripts/update_results.py [data.json]
+Uso: python scripts/update_results.py [data.json] [--si-toca]
 """
 import datetime as dt
 import json
@@ -13,6 +16,7 @@ import sys
 import time
 import unicodedata
 import urllib.request
+from zoneinfo import ZoneInfo
 
 LEAGUE_ID = 4335  # La Liga en TheSportsDB
 SEASON = "2026-2027"
@@ -85,8 +89,35 @@ def openfootball_round(n):
              "date": f"{m['date']}T{m.get('time', '00:00')}:00"} for m in ms]
 
 
-def main(path):
+def kickoff(s):
+    """Fecha de un partido en UTC; sin zona horaria se entiende hora de Madrid (openfootball)."""
+    t = dt.datetime.fromisoformat(s.replace("Z", "+00:00"))
+    return t if t.tzinfo else t.replace(tzinfo=ZoneInfo("Europe/Madrid"))
+
+
+def due(data, now=None):
+    """¿Hace falta consultar? Hay un partido que ha podido terminar o toca la pasada de mantenimiento."""
+    now = now or dt.datetime.now(dt.timezone.utc)
+    if now.hour in (6, 18):   # toda la hora: los cron de GitHub se retrasan
+        return "pasada de mantenimiento"
+    for j in data["jornadas"]:
+        for m in j["matches"]:
+            if m.get("result") or m.get("status") in HALTED or not m.get("date"):
+                continue
+            ago = now - kickoff(m["date"])
+            if dt.timedelta(minutes=105) <= ago <= dt.timedelta(hours=24):
+                return f"J{j['n']} {m['home']}-{m['away']} pudo terminar"
+    return None
+
+
+def main(path, only_if_due=False):
     data = json.load(open(path, encoding="utf-8"))
+    if only_if_due:
+        why = due(data)
+        if not why:
+            print("Ningún partido por terminar; no consulto")
+            return
+        print(f"Consulto: {why}")
     changes = []
     cache = {}
 
@@ -147,4 +178,5 @@ def main(path):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1] if len(sys.argv) > 1 else "data.json")
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    main(args[0] if args else "data.json", only_if_due="--si-toca" in sys.argv)

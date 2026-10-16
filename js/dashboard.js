@@ -70,9 +70,11 @@
       el("th", {}, "Total"), el("th", { title: "Jornadas ganadas" }, "👑"),
       el("th", { title: "Resultados exactos" }, "Exactos"), el("th", { title: "% de partidos con algún acierto" }, "% acierto"),
       el("th", { title: "Jornadas en último lugar × 3 €" }, "Bote"));
+    const cut = S.table.length > 6 ? S.table[S.table.length - 3].pos : Infinity;
     const rows = S.table.map((t) => {
       const c = colorOf(t.name);
-      const tr = el("tr", { class: "clickable" + (c ? " sel" : ""), onclick: () => toggle(t.name) },
+      const tr = el("tr", { class: "clickable" + (c ? " sel" : "") + (t.pos >= cut ? " bottom" : ""), onclick: () => toggle(t.name),
+        title: t.pos >= cut ? "Zona roja: los 3 últimos" : "" },
         el("td", { class: "pos" }, t.pos),
         el("td", { class: "name" }, t.name),
         S.active.map((x) => {
@@ -263,23 +265,55 @@
     $("#facts").replaceChildren(...facts.map(([k, v, d]) => el("div", { class: "fact" }, el("div", { class: "k" }, k), el("div", { class: "v" }, v), el("div", { class: "d" }, d))));
   }
 
-  async function load() {
+  let lastUpdated = null;
+  async function load(auto = false) {
     try {
       const res = await fetch(`data.json?v=${Date.now()}`, { cache: "no-store" });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
+      if (auto && data.updated === lastUpdated) return;
+      const first = lastUpdated === null;
+      lastUpdated = data.updated;
       S = compute(data);
       $("#season").textContent = `Temporada ${data.season}`;
       const d = new Date(data.updated);
       $("#updated").textContent = `Actualizado ${d.toLocaleString("es-ES", { dateStyle: "medium", timeStyle: "short" })}`;
-      sel.splice(0, sel.length, ...S.table.slice(0, 3).map((t) => t.name));
+      if (first) sel.splice(0, sel.length, ...S.table.slice(0, 3).map((t) => t.name));
       const live = S.jornadas.filter((j) => j.started);
-      curJ = (live[live.length - 1] || S.jornadas[0]).n;
+      const liveN = (live[live.length - 1] || S.jornadas[0]).n;
+      // en la primera carga (o si se seguía la jornada en curso) se muestra la jornada en curso
+      if (first || curJ === prevLive || !S.jornadas.some((j) => j.n === curJ)) curJ = liveN;
+      prevLive = liveN;
       renderTiles(data); renderTable(); renderEvo(); renderJornada(); renderStack(); renderComodin(); renderFacts(data);
     } catch (e) {
-      $("#updated").replaceChildren(el("span", { class: "err" }, `No se pudieron cargar los datos (${e.message}).`));
+      if (!auto) $("#updated").replaceChildren(el("span", { class: "err" }, `No se pudieron cargar los datos (${e.message}).`));
     }
   }
+  let prevLive = null;
+  // Comprueba si hay datos nuevos cada 2 minutos (y al volver a la pestaña) sin recargar la página
+  setInterval(() => { if (!document.hidden) load(true); }, 120000);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden && S) load(true); });
+
+  // ---------- Pantalla completa (Clasificación y Jornada) ----------
+  // La tarjeta ocupa toda la ventana; además se pide pantalla completa al navegador si lo permite (en iPhone no).
+  function setFull(card, on) {
+    document.querySelectorAll(".fs-able.is-full").forEach((c) => { if (c !== card) c.classList.remove("is-full"); });
+    card.classList.toggle("is-full", on);
+    document.body.classList.toggle("has-full", on);
+    const b = card.querySelector(".fs-btn");
+    b.setAttribute("aria-pressed", String(on));
+    b.textContent = on ? "✕ Salir" : "⛶ Pantalla completa";
+    b.title = on ? "Salir de pantalla completa (Esc)" : "Pantalla completa";
+    const root = document.documentElement;
+    if (on && root.requestFullscreen && !document.fullscreenElement) root.requestFullscreen().catch(() => {});
+    if (!on && document.fullscreenElement) document.exitFullscreen().catch(() => {});
+    if (card.id === "clasif" && S) renderEvo();
+  }
+  document.querySelectorAll(".fs-able").forEach((card) =>
+    card.querySelector(".fs-btn").addEventListener("click", () => setFull(card, !card.classList.contains("is-full"))));
+  const closeFull = () => document.querySelectorAll(".fs-able.is-full").forEach((c) => setFull(c, false));
+  document.addEventListener("fullscreenchange", () => { if (!document.fullscreenElement) closeFull(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeFull(); });
 
   document.querySelectorAll("#evoMode button").forEach((b) => b.addEventListener("click", () => {
     evoMode = b.dataset.m;
@@ -294,7 +328,7 @@
     document.querySelectorAll(".tabpanel").forEach((p) => { p.hidden = p.dataset.panel !== t; });
     if (t === "clasificacion" && S) renderEvo(); // el gráfico se dimensiona con el ancho visible
   }
-  window.addEventListener("hashchange", () => { showTab(); window.scrollTo(0, 0); });
+  window.addEventListener("hashchange", () => { closeFull(); showTab(); window.scrollTo(0, 0); });
   showTab();
 
   let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => S && renderEvo(), 120); });
