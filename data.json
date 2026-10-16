@@ -1,7 +1,7 @@
 {
  "season": "26/27 · 1a volta",
- "updated": "2026-10-16T16:41:46Z",
- "updatedBy": "Admin",
+ "updated": "2026-10-16T21:13:47Z",
+ "updatedBy": "Bot de resultados",
  "players": [
   "ADRIÀ",
   "ALEIX",
@@ -2106,7 +2106,7 @@
     {
      "home": "DEP",
      "away": "LEV",
-     "result": null,
+     "result": "1-1",
      "date": "2026-10-16T19:00:00Z"
     },
     {
