@@ -1,7 +1,7 @@
 {
  "season": "26/27 · 1a volta",
- "updated": "2026-10-16T21:13:47Z",
- "updatedBy": "Bot de resultados",
+ "updated": "2026-10-17T14:59:02Z",
+ "updatedBy": "Claude",
  "players": [
   "ADRIÀ",
   "ALEIX",
@@ -2112,7 +2112,7 @@
     {
      "home": "ESP",
      "away": "ATM",
-     "result": null,
+     "result": "0-1",
      "date": "2026-10-17T12:00:00Z"
     },
     {
