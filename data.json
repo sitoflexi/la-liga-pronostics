@@ -1,6 +1,6 @@
 {
  "season": "26/27 · 1a volta",
- "updated": "2026-10-18T21:04:29Z",
+ "updated": "2026-10-19T21:01:55Z",
  "updatedBy": "Claude",
  "players": [
   "ADRIÀ",
@@ -2160,7 +2160,7 @@
     {
      "home": "GET",
      "away": "RAY",
-     "result": null,
+     "result": "1-1",
      "date": "2026-10-19T19:00:00Z"
     }
    ],
