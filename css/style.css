@@ -175,7 +175,7 @@ footer { color: var(--muted); font-size: 12px; text-align: center; margin-top: 2
 /* Pestañas */
 .tabs { display: flex; gap: 4px; position: sticky; top: 0; z-index: 20; background: var(--page);
   box-shadow: inset 0 -1px 0 var(--grid); margin: -8px 0 20px; padding-top: 8px; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
-.tabs a { padding: 10px 14px; color: var(--ink-2); text-decoration: none; font-weight: 600; white-space: nowrap;
+.tabs a { padding: 10px 12px; color: var(--ink-2); text-decoration: none; font-weight: 600; white-space: nowrap;
   border-bottom: 2px solid transparent; }
 .tabs a:hover { color: var(--ink); }
 .tabs a[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
@@ -199,3 +199,26 @@ tr.bottom.sel td.name { box-shadow: inset 4px 0 0 var(--selc, var(--accent)); }
 .fs-able.is-full td.name, .fs-able.is-full th.name { position: static; }
 body.has-full { overflow: hidden; }
 body.has-full .tabs { visibility: hidden; }
+
+/* Normativa y premios */
+.prizes { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+.prizes > .card { margin-bottom: 0; }
+@media (max-width: 760px) { .prizes { grid-template-columns: 1fr; } }
+.prize-box h3, .rules h3 { font-size: 15px; margin: 18px 0 6px; }
+.rules h4 { font-size: 14px; margin: 12px 0 4px; color: var(--ink-2); }
+.rules p, .rules ul { margin: 0 0 8px; }
+.rules ul, .prize-box ul.plain { padding-left: 20px; }
+.rules li { margin: 3px 0; }
+.podium { list-style: none; margin: 10px 0 0; padding: 0; }
+.podium li { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; margin-bottom: 6px;
+  background: var(--exact-bg); color: var(--exact-ink); }
+.penalty .podium li { background: var(--miss-bg); color: var(--miss-ink); }
+.podium .medal { font-size: 20px; min-width: 34px; text-align: center; font-weight: 700; }
+.penalty .podium .medal { font-size: 15px; }
+.podium .who { flex: 1; font-weight: 600; }
+.podium b { font-size: 20px; font-variant-numeric: tabular-nums; }
+.score-rules { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 8px; }
+.pill { padding: 4px 10px; border-radius: 999px; font-size: 13px; font-weight: 600; }
+.pill.exact { background: var(--exact-bg); color: var(--exact-ink); }
+.pill.sign { background: var(--sign-bg); color: var(--sign-ink); }
+.pill.miss { background: var(--miss-bg); color: var(--miss-ink); }

@@ -337,10 +337,10 @@
     renderEvo();
   }));
   // ---------- Pestañas (#clasificacion, #jornadas, #estadisticas) ----------
-  const TABS = ["clasificacion", "jornadas", "estadisticas"];
+  const TABS = ["clasificacion", "jornadas", "estadisticas", "normativa"];
   function showTab() {
     const t = TABS.includes(location.hash.slice(1)) ? location.hash.slice(1) : TABS[0];
-    document.querySelectorAll(".tabs a").forEach((a) => a.setAttribute("aria-selected", String(a.dataset.tab === t)));
+    document.querySelectorAll(".tabs a").forEach((a) => { a.setAttribute("aria-selected", String(a.dataset.tab === t)); if (a.dataset.tab === t) a.scrollIntoView({ block: "nearest", inline: "nearest" }); });
     document.querySelectorAll(".tabpanel").forEach((p) => { p.hidden = p.dataset.panel !== t; });
     if (t === "clasificacion" && S) renderEvo(); // el gráfico se dimensiona con el ancho visible
   }
