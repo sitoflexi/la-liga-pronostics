@@ -1,7 +1,7 @@
 {
  "season": "26/27 · 1a volta",
- "updated": "2026-10-30T22:56:32Z",
- "updatedBy": "Bot de resultados",
+ "updated": "2026-10-31T14:54:34Z",
+ "updatedBy": "Claude",
  "players": [
   "ADRIÀ",
   "ALEIX",
@@ -2692,7 +2692,7 @@
     {
      "home": "LEV",
      "away": "ATM",
-     "result": null,
+     "result": "0-2",
      "date": "2026-10-31T13:00:00Z"
     },
     {
