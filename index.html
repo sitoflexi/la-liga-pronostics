@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>La Liga Pronòstics</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>">
-<link rel="stylesheet" href="css/style.css?v=3">
+<link rel="stylesheet" href="css/style.css?v=4">
 </head>
 <body>
 <div class="wrap">
@@ -206,6 +206,21 @@
 
   <footer>Datos gestionados por los admins · <a href="admin.html">Admin</a></footer>
 </div>
+<div class="popup" id="popup" role="dialog" aria-modal="true" aria-label="Aviso">
+  <div class="popup-box">
+    <button class="popup-x" type="button" aria-label="Cerrar">✕</button>
+    <img src="img/popup.jpg?v=1" alt="Camprubí" width="596" height="800">
+  </div>
+</div>
+<script>
+(function () {
+  const p = document.getElementById("popup");
+  const close = () => { p.hidden = true; document.body.classList.remove("has-popup"); };
+  document.body.classList.add("has-popup");
+  p.addEventListener("click", (e) => { if (e.target === p || e.target.closest(".popup-x")) close(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !p.hidden) close(); });
+})();
+</script>
 <script src="js/core.js?v=2"></script>
 <script src="js/dashboard.js?v=3"></script>
 </body>
