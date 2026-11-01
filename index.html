@@ -206,23 +206,6 @@
 
   <footer>Datos gestionados por los admins · <a href="admin.html">Admin</a></footer>
 </div>
-<div class="popup" id="popup" role="dialog" aria-modal="true" aria-label="Aviso">
-  <div class="popup-box">
-    <button class="popup-x" type="button" aria-label="Cerrar">✕</button>
-    <img id="popupImg" src="" alt="">
-  </div>
-</div>
-<script>
-(function () {
-  const p = document.getElementById("popup");
-  const IMGS = ["img/popup.jpg", "img/popup2.jpg", "img/popup3.jpg", "img/popup4.jpg", "img/popup5.jpg", "img/popup6.jpg", "img/popup7.jpg", "img/popup8.jpg", "img/popup9.jpg", "img/popup10.jpg", "img/popup11.jpg", "img/popup12.jpg", "img/popup13.jpg"];
-  document.getElementById("popupImg").src = IMGS[Math.floor(Math.random() * IMGS.length)] + "?v=6";
-  const close = () => { p.hidden = true; document.body.classList.remove("has-popup"); };
-  document.body.classList.add("has-popup");
-  p.addEventListener("click", (e) => { if (e.target === p || e.target.closest(".popup-x")) close(); });
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !p.hidden) close(); });
-})();
-</script>
 <script src="js/core.js?v=2"></script>
 <script src="js/dashboard.js?v=3"></script>
 </body>

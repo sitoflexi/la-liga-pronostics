@@ -222,13 +222,3 @@ body.has-full .tabs { visibility: hidden; }
 .pill.exact { background: var(--exact-bg); color: var(--exact-ink); }
 .pill.sign { background: var(--sign-bg); color: var(--sign-ink); }
 .pill.miss { background: var(--miss-bg); color: var(--miss-ink); }
-
-/* Pop-up de bienvenida */
-.popup { position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center;
-  background: rgba(0, 0, 0, 0.7); padding: 16px; }
-.popup[hidden] { display: none; }
-.popup-box { position: relative; max-width: min(420px, 100%); }
-.popup-box img { display: block; width: 100%; height: auto; max-height: calc(100vh - 32px); object-fit: contain; border-radius: 12px; }
-.popup-x { position: absolute; top: 8px; right: 8px; width: 36px; height: 36px; border-radius: 50%; border: 0;
-  background: rgba(0, 0, 0, 0.65); color: #fff; font-size: 18px; cursor: pointer; }
-body.has-popup { overflow: hidden; }
