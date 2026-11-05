@@ -1,7 +1,7 @@
 {
  "season": "26/27 · 1a volta",
- "updated": "2026-11-02T21:58:58Z",
- "updatedBy": "Claude",
+ "updated": "2026-11-05T18:49:42Z",
+ "updatedBy": "Bot de resultados",
  "players": [
   "ADRIÀ",
   "ALEIX",
@@ -2956,6 +2956,73 @@
     "SITO": 4,
     "VEGA": 4
    }
+  },
+  {
+   "n": 12,
+   "matches": [
+    {
+     "home": "SEV",
+     "away": "ALA",
+     "result": null,
+     "date": "2026-11-06T20:00:00Z"
+    },
+    {
+     "home": "MAL",
+     "away": "RAC",
+     "result": null,
+     "date": "2026-11-07T13:00:00Z"
+    },
+    {
+     "home": "ESP",
+     "away": "DEP",
+     "result": null,
+     "date": "2026-11-07T15:15:00Z"
+    },
+    {
+     "home": "OSA",
+     "away": "ATH",
+     "result": null,
+     "date": "2026-11-07T17:30:00Z"
+    },
+    {
+     "home": "VAL",
+     "away": "RMA",
+     "result": null,
+     "date": "2026-11-07T20:00:00Z"
+    },
+    {
+     "home": "ELC",
+     "away": "BET",
+     "result": null,
+     "date": "2026-11-08T13:00:00Z"
+    },
+    {
+     "home": "RSO",
+     "away": "RAY",
+     "result": null,
+     "date": "2026-11-08T15:15:00Z"
+    },
+    {
+     "home": "VIL",
+     "away": "GET",
+     "result": null,
+     "date": "2026-11-08T17:30:00Z"
+    },
+    {
+     "home": "CEL",
+     "away": "LEV",
+     "result": null,
+     "date": "2026-11-08T17:30:00Z"
+    },
+    {
+     "home": "ATM",
+     "away": "FCB",
+     "result": null,
+     "date": "2026-11-08T20:00:00Z"
+    }
+   ],
+   "preds": {},
+   "comodin": {}
   }
  ],
  "boteAjuste": {}
