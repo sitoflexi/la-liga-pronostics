@@ -181,7 +181,7 @@ footer { color: var(--muted); font-size: 12px; text-align: center; margin-top: 2
 .tabs a[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
 .tabpanel[hidden] { display: none; }
 
-/* Zona roja: los 3 últimos (mismo estilo de barra lateral que los destacados) */
+/* Zona roja: los 2 últimos (mismo estilo de barra lateral que los destacados) */
 tr.bottom td.pos, tr.bottom td.name { background: var(--miss-bg); color: var(--miss-ink); }
 tr.bottom td.pos { box-shadow: inset 4px 0 0 var(--miss); }
 tr.bottom.sel td.name { box-shadow: inset 4px 0 0 var(--selc, var(--accent)); }

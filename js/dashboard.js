@@ -70,11 +70,11 @@
       el("th", {}, "Total"), el("th", { title: "Jornadas ganadas" }, "👑"),
       el("th", { title: "Resultados exactos" }, "Exactos"), el("th", { title: "% de partidos con algún acierto" }, "% acierto"),
       el("th", { title: "Jornadas en último lugar × 3 €" }, "Bote"));
-    const cut = S.table.length > 6 ? S.table[S.table.length - 3].pos : Infinity;
+    const cut = S.table.length > 6 ? S.table[S.table.length - 2].pos : Infinity;
     const rows = S.table.map((t) => {
       const c = colorOf(t.name);
       const tr = el("tr", { class: "clickable" + (c ? " sel" : "") + (t.pos >= cut ? " bottom" : ""), onclick: () => toggle(t.name),
-        title: t.pos >= cut ? "Zona roja: los 3 últimos" : "" },
+        title: t.pos >= cut ? "Zona roja: los 2 últimos" : "" },
         el("td", { class: "pos" }, t.pos),
         el("td", { class: "name" }, t.name),
         S.active.map((x) => {
